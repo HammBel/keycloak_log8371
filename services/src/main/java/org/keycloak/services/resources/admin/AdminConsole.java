@@ -215,7 +215,7 @@ public class AdminConsole {
     @NoCache
     public Response whoAmI(@QueryParam("currentRealm") String currentRealm) {
         if (!Profile.isFeatureEnabled(Profile.Feature.ADMIN_API)) {
-            throw new NotFoundException();
+            throw new NotFoundException("Admin API feature is disabled");
         }
 
         RealmManager realmManager = new RealmManager(session);
@@ -226,7 +226,7 @@ public class AdminConsole {
                 .authenticate();
 
         if (authResult == null) {
-            throw new NotAuthorizedException("Bearer");
+            throw new NotAuthorizedException("Authentication failed: no valid bearer token provided");
         }
 
         final String issuedFor = authResult.getToken().getIssuedFor();
